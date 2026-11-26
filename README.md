@@ -1,21 +1,33 @@
 # Adenda
 
-**Adendas multiparte con pagos programables en Stellar.**
+**Contratos vivos multiparte sobre Stellar.**
 
-Cuando un cliente cambia el alcance, varios subcontratistas pueden tener que rehacer entregables, comprar materiales o asumir nuevos plazos. **Adenda convierte ese cambio en una versión que las partes afectadas autorizan y fondean antes de empezar el trabajo adicional.** En esa misma versión quedan acordados el presupuesto, los hitos y las condiciones de pago.
+Cuando cambia el alcance de un proyecto, el cambio puede afectar a varios subcontratistas a la vez. Adenda muestra **qué compromisos cambian, cuánto cuesta el ajuste y qué firmas y fondos faltan** antes de aplicarlo.
 
-Firman el cliente, la empresa contratante y los proveedores cuyas condiciones cambian. Cada autorización queda vinculada al hash de esa versión. Si cambia el alcance, el importe o el plazo, las partes revisan y autorizan una versión nueva.
+## El núcleo
 
-## Qué puede acordarse en la adenda
-
-| Condición | Qué hace el contrato |
+| Pieza | Qué hace |
 | --- | --- |
-| **Retención de pago** | Retiene una parte del importe de un hito y la libera cuando se cumple la condición pactada, como la conformidad final. |
-| **Garantía contractual** | Mantiene un depósito separado en escrow. Lo devuelve al aportante cuando se cumple la obligación o lo distribuye según la resolución de una disputa autorizada. |
-| **Adelanto con destino específico** | Paga directamente al proveedor autorizado para una orden concreta, como la compra de materiales. El adelanto se descuenta del saldo del subcontrato. |
+| **Grafo de obligaciones** | Modela los compromisos como nodos y sus dependencias como aristas. Cada obligación tiene un monto, un plazo y un estado de fondeo. |
+| **Adenda versionada** | Propaga el impacto por el grafo, calcula el ajuste presupuestario e identifica quiénes deben aprobar: las partes afectadas y quien aporta los fondos. |
+| **Ejecución atómica** | Soroban aplica todos los cambios en una sola transacción cuando están las aprobaciones requeridas y cada obligación nueva o modificada tiene respaldo. Si falta algo, sigue vigente la versión anterior. |
 
-## Qué aporta Stellar
+## Flujo
 
-- **Soroban** comprueba las firmas y los depósitos requeridos. La activación y la reserva por obligación ocurren en la misma transacción.
-- **Bell (Protocolo 30, CAP-84)** permite identificar los depósitos con una dirección multiplexada `W…` por adenda dentro de una tesorería compartida. El contrato contabiliza cada reserva por separado.
-- **Trustless Work** es la integración prevista para los escrows y la liberación de pagos por hitos.
+```mermaid
+flowchart TD
+    A["Proponer una adenda"] --> B["Calcular afectados, costo y firmas"]
+    B --> C{"¿Firmas completas y obligaciones fondeadas?"}
+    C -->|Sí| D["Aplicar todos los cambios y registrar la nueva versión"]
+    C -->|No| E["Mantener la versión vigente y mostrar qué falta"]
+```
+
+El **tablero de fondeo** muestra qué obligaciones tienen respaldo total, parcial o pendiente. El historial conserva las versiones, quién aprobó cada cambio y con qué fondos se ejecutó.
+
+## Qué hace Stellar
+
+- **Soroban** mantiene el grafo, las adendas y las reglas de ejecución.
+- **Trustless Work** es la integración prevista para custodiar fondos y liberar pagos.
+- **Bell (CAP-84)** facilita la conciliación con direcciones multiplexadas. Los escrows y el estado del contrato llevan la separación de fondos.
+
+**Alcance inicial:** grafo, adendas y tablero de fondeo en Stellar Testnet.
