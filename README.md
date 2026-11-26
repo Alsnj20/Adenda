@@ -4,19 +4,6 @@
 
 Cuando un cliente cambia el alcance, varios subcontratistas pueden tener que rehacer entregables, comprar materiales o asumir nuevos plazos. **Adenda convierte ese cambio en una versión que las partes afectadas autorizan y fondean antes de empezar el trabajo adicional.** En esa misma versión quedan acordados el presupuesto, los hitos y las condiciones de pago.
 
-## Cómo se activa una adenda
-
-```mermaid
-flowchart TD
-    A["El cliente solicita un cambio"] --> B["Adenda identifica entregables, costos y condiciones afectadas"]
-    B --> C["Las partes autorizan la misma versión"]
-    C --> D{"¿Firmas completas y depósitos requeridos?"}
-    D -->|Todavía no| E["La adenda queda pendiente"]
-    E -->|Llega una firma o un depósito| D
-    D -->|Sí| F["Soroban reserva los fondos y activa la adenda"]
-    F --> G["Se ejecutan los pagos según las condiciones acordadas"]
-```
-
 Firman el cliente, la empresa contratante y los proveedores cuyas condiciones cambian. Cada autorización queda vinculada al hash de esa versión. Si cambia el alcance, el importe o el plazo, las partes revisan y autorizan una versión nueva.
 
 ## Qué puede acordarse en la adenda
